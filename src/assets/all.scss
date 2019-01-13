@@ -1,0 +1,50 @@
+// 讀取 Bootstrap 樣式
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/bootstrap";
+
+@import "./customer";
+@import "./createOrder";
+
+
+.btn-primary {
+	color: #007bff;
+	background-color: transparent;
+	border-color: #007bff;
+}
+
+.breadcrumb {
+	background-color: #fff;
+}
+
+.cart {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	z-index: 10;
+	.cart-icon {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		cursor:pointer;
+	}
+	.fa-shopping-cart {
+		font-size: 36px;
+		text-shadow: 0 0 2px rgba(0,0,0, 0.6);
+	}
+	.fa-circle {
+		position: absolute;
+		top: -7px;
+		right: -5px;
+		color: red;
+	}
+	.cart-box {
+		position: relative;
+    bottom: 50px;
+		right: 50px;
+		.btn-sm {
+			font-size: 12px;
+		}
+	}
+}
+
+

@@ -1,0 +1,12 @@
+.step {
+  display: inline-block;
+  padding: 2px;
+  color: #b1b1b1;
+  font-weight: bold;
+  border-bottom: 2px solid transparent;
+}
+
+.current-step {
+  color: #000;
+  border-color: #000;
+}
