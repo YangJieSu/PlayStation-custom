@@ -1,15 +1,8 @@
 <template>
   <div>
+    <AlertMessage></AlertMessage>
     <Navbar></Navbar>
-
-    <div class="banner">
-      <div class="container">
-        <h2>買到剁手手 ! 最後出清</h2>
-        <p>This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
-      </div>
-    </div>
-
-    <div class="cart">
+    <div class="cart"  v-if="cart.carts.length !== 0">
       <div class="cart-icon" @click.prevent="showCart = !showCart">
         <i class="fas fa-shopping-cart"></i>
         <i class="fas fa-circle" v-if="cart.carts.length !== 0"></i>
@@ -30,7 +23,7 @@
             <table class="table-sm my-2">
               <tbody>
                 <tr v-if="cart.carts.length == 0">購物車還沒有東西喔!</tr>
-                <tr v-for="(item, index) in cart.carts" :key="item.id">
+                <tr v-for="item in cart.carts" :key="item.id">
                   <td>
                     <button type="button" class="btn btn-outline-danger btn-sm" @click.prevent="rempoveCart(item.id)"><i class="fas fa-trash-alt"></i></button>
                   </td>
@@ -42,35 +35,24 @@
             </table>
             <!-- button -->
             <router-link class="nav-item text-white" to="/create_order" v-if="cart.carts.length !== 0">
-              <button type="button" class="btn btn-danger d-block w-100 mb-3" @click="closeCart">結帳去!</button>
+              <button type="button" class="btn btn-danger btn-block w-100 mb-3" @click="closeCart">結帳去!</button>
             </router-link>
-            <button type="button" class="btn btn-danger d-block w-100 mb-3" v-if="cart.carts.length == 0" @click.prevent="closeCart">繼續購物</button>
+            <button type="button" class="btn btn-danger btn-block w-100 mb-3" v-if="cart.carts.length == 0" @click.prevent="closeCart">繼續購物</button>
           </div>
         </div>
       </div>
     </div>
+    
+    <router-view></router-view>
 
-    <router-view @loadCart="getCart"></router-view>
-
-    <div class="footer bg-light">
-      <div class="container text-center">
-        <div class="copyright d-flex align-items-baseline justify-content-center">
-          <div class="h5">© Copright 2017 六角購物網</div>
-          <div class="social-media">
-            <a href="#" class="text-info"><i class="fab fa-instagram"></i>Instagrame</a>
-            <a href="#" class="text-info"><i class="fab fa-instagram"></i>Facebook</a>
-            <a href="#" class="text-info">About</a>
-          </div> 
-        </div>
-        <p>Made with Bootstrap4</p> 
-      </div>
-    </div>
+    <Footer></Footer>
 
   </div>
 </template>
 
 <script>
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/footer';
 
   export default {
     data() {
@@ -78,11 +60,12 @@ import Navbar from '@/components/Navbar';
         cart: {
           carts: [],
         },
-        showCart: false,
-      };
+      showCart: false,
+      }
     },
     components: {
       Navbar,
+      Footer
     },
     methods: {
       getCart() {
@@ -109,7 +92,11 @@ import Navbar from '@/components/Navbar';
       },
     },
     created() {
-      this.getCart();
+      const vm = this;
+      vm.getCart();
+      vm.$bus.$on('shopCart:update', () => {
+        vm.getCart();
+      });
     },
   };
 </script>

@@ -23,12 +23,19 @@ VeeValidate.Validator.localize('zh_TW', zh_TW);
 
 
 Vue.component('Loading', Loading);
+Vue.component('Pagination', Pagination);
+Vue.component('AlertMessage', AlertMessage);
 Vue.filter('currency', currencyFilter);
+Vue.filter('prodCategory', prodCategory);
 
 
-import App from './App'
-import router from './router'
-import currencyFilter from './filters/currency'
+import App from './App';
+import router from './router';
+import './bus';
+import currencyFilter from './filters/currency';
+import prodCategory from './filters/prodCategory';
+import Pagination from './components/Pagination';
+import AlertMessage from './components/AlertMessage';
 
 Vue.config.productionTip = false
 

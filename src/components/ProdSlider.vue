@@ -1,0 +1,123 @@
+<template>
+  <div class="mt-3">
+    <loading :active.sync="isLoading">
+      <img src="@/assets/images/loading.gif" alt="" width="200">
+    </loading>
+    <div class="swiper-container" id="prodSwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" v-for="item in filterData" :key="item.id">
+          <ProductCard :cardData="item" class="h-100"></ProductCard>
+        </div>
+      </div>
+    </div>
+  </div>  
+</template>
+
+<script>
+import Swiper from "swiper";
+import ProductCard from '@/components/ProductCard';
+export default {
+  data: function() {
+    return {
+      products: [],
+      isLoading: false,
+    }
+  },
+  components: {
+    ProductCard
+  },
+  props: {
+    prodCategory: {
+      type: String,
+      default: ''
+    },
+    searchFilter: {
+      type: String,
+      default: ''
+    },
+    searchResult: {
+      type:Array,
+      default:function(){
+        return [];
+      }
+    }
+  },
+  methods: {
+    getProducts() {
+      // 取得所有產品
+      const vm = this;
+      let api = `${process.env.API_PATH}/api/${process.env.CUSTOM_PATH}/products/all`;
+      vm.isLoading = true;
+      this.$http.get(api).then((response) => {
+        console.log(response.data)
+        if(response.data.success) {
+          vm.products = response.data.products;
+          vm.isLoading = false;
+        }
+      });
+    }
+  },
+  computed: {
+    filterData() {
+      const vm = this;
+      if(vm.searchFilter || vm.searchResult.length) {
+        return vm.searchResult;
+      } else {
+        return vm.products.filter((item) => {
+          if(vm.prodCategory == 'all') {
+            return item
+          } else {
+            return item.category == vm.prodCategory;
+          }
+        });
+      };
+    }
+  },
+  mounted() {
+    var mySwiper = new Swiper("#prodSwiper", {
+      // Optional parameters
+      // direction: "horizontal",
+      slidesPerView: 4,
+      slidesPerGroup: 4,
+      spaceBetween: 10,
+      grabCursor: true,
+      speed: 600,
+      autoplay: {
+        delay: 5000,
+      },
+      breakpoints: {
+        480: {
+          slidesPerView: 1,
+          slidesPerGroup:1,
+          spaceBetween: 20,      
+        },
+        767: {
+          slidesPerView: 2,
+          slidesPerGroup:2,
+          spaceBetween: 30
+        },
+        992: {
+          slidesPerView: 3,
+          slidesPerGroup:3,
+          spaceBetween: 30
+        }
+      },
+      // If we need pagination
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      }
+    });
+  },
+  created() {
+    const vm = this;
+    vm.getProducts();
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+#prodSwiper {
+  min-height: 370px;
+}
+</style>
