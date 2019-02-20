@@ -88,7 +88,7 @@ export default {
       const vm = this;
       let api = `${process.env.API_PATH}/api/${process.env.CUSTOM_PATH}/product/${vm.productId}`;
       vm.isLoading = true;
-      this.$http.get(api,).then((response) => {
+      vm.$http.get(api,).then((response) => {
         console.log(response.data);
         vm.product = response.data.product;
         vm.$set(vm.product, 'buyNum', 1);
@@ -107,7 +107,7 @@ export default {
           product_id: id,
           qty,
         };
-        this.$http.post(api, { data: cart }).then((response) => {
+        vm.$http.post(api, { data: cart }).then((response) => {
           console.log(response.data);
           if(response.data.success) {
             vm.$bus.$emit('shopCart:update');
@@ -122,10 +122,18 @@ export default {
     },
   },
   created() {
-    this.productId = this.$route.params.productId;
-    this.getProduct();
+    const vm = this;
+    vm.productId = vm.$route.params.productId;
+    vm.getProduct();
     document.body.scrollTop = 350;
     document.documentElement.scrollTop = 350;
+  },
+  watch: {
+    '$route.params.productId'() {
+      const vm = this;
+      vm.productId = vm.$route.params.productId;
+      vm.getProduct();
+    },
   },
 };
 </script>
